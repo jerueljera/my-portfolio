@@ -1,75 +1,29 @@
 import { useState, useEffect } from 'react';
-import { Github, ExternalLink, Calendar, Tag, Users, Code, Server, Smartphone, Cloud, Database, Terminal, Layout } from 'lucide-react';
+import axios from 'axios';
+import { Github, ExternalLink, Calendar, Tag, Users, Code, Server, Smartphone, Cloud, Database, Terminal, Layout, Mail, MapPin, Briefcase, Award, ChevronRight, Download, Linkedin, Twitter, Cpu } from 'lucide-react';
 import './Home.css';
-
-// Mock data
-const mockProjects = [
-  {
-    id: 1,
-    title: 'E-Commerce Platform',
-    description: 'A full-featured online shopping platform with cart, checkout, and payment integration.',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop',
-    technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    github: 'https://github.com',
-    liveDemo: 'https://example.com',
-    date: '2024-01',
-    category: 'Full Stack'
-  },
-  {
-    id: 2,
-    title: 'Weather Dashboard',
-    description: 'Real-time weather forecasting application with interactive maps and charts.',
-    image: 'https://images.unsplash.com/photo-1592210454359-9043f067919b?w=400&h=250&fit=crop',
-    technologies: ['JavaScript', 'OpenWeather API', 'Chart.js'],
-    github: 'https://github.com',
-    liveDemo: 'https://example.com',
-    date: '2023-11',
-    category: 'Frontend'
-  },
-  {
-    id: 3,
-    title: 'Task Management App',
-    description: 'Collaborative project management tool with real-time updates and team collaboration.',
-    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=250&fit=crop',
-    technologies: ['React', 'Socket.io', 'Express', 'PostgreSQL'],
-    github: 'https://github.com',
-    liveDemo: 'https://example.com',
-    date: '2024-02',
-    category: 'Full Stack'
-  },
-  {
-    id: 4,
-    title: 'Mobile Fitness Tracker',
-    description: 'Cross-platform mobile app for tracking workouts and fitness progress.',
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop',
-    technologies: ['React Native', 'Firebase', 'Redux'],
-    github: 'https://github.com',
-    liveDemo: 'https://example.com',
-    date: '2023-12',
-    category: 'Mobile'
-  },
-];
+import portfolioImage from '../assets/portfolio.jpg';
 
 const skillCategories = [
   {
-    name: 'Frontend',
-    icon: <Layout size={24} />,
-    skills: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Redux']
-  },
-  {
     name: 'Backend',
     icon: <Server size={24} />,
-    skills: ['Node.js', 'Express', 'Python', 'Django', 'REST APIs']
+    skills: ['Node.js', 'Express', 'Python', 'Django', 'REST APIs', 'GraphQL', 'Microservices']
   },
   {
     name: 'Database',
     icon: <Database size={24} />,
-    skills: ['MongoDB', 'PostgreSQL', 'MySQL', 'Redis', 'Firebase']
+    skills: ['MongoDB', 'PostgreSQL', 'MySQL', 'Redis', 'Firebase', 'Elasticsearch']
   },
   {
     name: 'DevOps',
     icon: <Terminal size={24} />,
-    skills: ['Docker', 'AWS', 'CI/CD', 'Git', 'Linux']
+    skills: ['Docker', 'AWS', 'CI/CD', 'Git', 'Linux', 'Nginx', 'Kubernetes']
+  },
+  {
+    name: 'Tools',
+    icon: <Cpu size={24} />,
+    skills: ['GitHub', 'Postman', 'JWT', 'OAuth', 'WebSocket', 'Redis', 'Socket.io']
   }
 ];
 
@@ -77,17 +31,26 @@ const Home = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('All');
-  const [activeCategory, setActiveCategory] = useState('Frontend');
+  const [activeCategory, setActiveCategory] = useState('Backend');
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setProjects(mockProjects);
-      setLoading(false);
-    }, 1000);
+    const fetchProjects = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get('/api/projects');
+        setProjects(res.data);
+      } catch (err) {
+        console.error(err);
+        // Optionally, set an error state here
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
   }, []);
 
-  const categories = ['All', 'Frontend', 'Full Stack', 'Backend', 'Mobile'];
+  const categories = ['All', 'Backend', 'Full Stack', 'DevOps', 'Database'];
 
   const filteredProjects = filter === 'All' 
     ? projects 
@@ -95,45 +58,140 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Hero Section */}
-      <section className="hero-section">
+      {/* About Me Section - New */}
+      <section className="about-section">
         <div className="container">
-          <div className="hero-content">
-            <div className="hero-text">
-              <h1 className="hero-title">
-                <span className="hero-title-line">Crafting Digital</span>
-                <span className="hero-title-line gradient-text">Experiences</span>
-              </h1>
-              <p className="hero-subtitle">
-                Full Stack Developer passionate about creating elegant solutions to complex problems with modern web technologies.
-              </p>
-              
-              <div className="hero-actions">
-                <a href="#projects" className="btn-primary">
-                  View Projects
-                </a>
-                <a href="/admin" className="btn-secondary">
-                  Add Project
-                </a>
+          <div className="about-grid">
+            {/* Left Side - Profile Picture with Effects */}
+            <div className="profile-side">
+              <div className="profile-image-wrapper">
+                <div className="profile-image-container">
+                  <img 
+                    src={portfolioImage} 
+                    alt="Profile"
+                    className="profile-image"
+                  />
+                  {/* Animated Rings */}
+                  <div className="ring ring-1"></div>
+                  <div className="ring ring-2"></div>
+                  <div className="ring ring-3"></div>
+                  {/* Floating Elements */}
+                  <div className="floating-element element-1">
+                    <Server size={20} />
+                  </div>
+                  <div className="floating-element element-2">
+                    <Database size={20} />
+                  </div>
+                  <div className="floating-element element-3">
+                    <Code size={20} />
+                  </div>
+                </div>
+                
+                {/* Quick Stats */}
+                <div className="profile-stats">
+                  <div className="stat-item">
+                    <span className="stat-number">25+</span>
+                    <span className="stat-label">Projects</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-number">3+</span>
+                    <span className="stat-label">Years Exp</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-number">50+</span>
+                    <span className="stat-label">Technologies</span>
+                  </div>
+                </div>
+                
+                {/* Social Links */}
+                <div className="social-links">
+                  <a href="https://github.com/jerueljera" target="_blank" rel="noopener noreferrer" className="social-link">
+                    <Github size={20} />
+                  </a>
+                  <a href="https://www.linkedin.com/in/jeruel-almonte-ajera-8786b4372/" target="_blank" rel="noopener noreferrer" className="social-link">
+                    <Linkedin size={20} />
+                  </a>
+                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                    <Twitter size={20} />
+                  </a>
+                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jeal.ajera.up@phinmaed.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                    <Mail size={20} />
+                  </a>
+                </div>
               </div>
             </div>
-            
-            <div className="hero-stats">
-              <div className="stat-card">
-                <div className="stat-number">25+</div>
-                <div className="stat-label">Projects Completed</div>
+
+            {/* Right Side - About Content */}
+            <div className="about-content">
+              <div className="section-badge">
+                <Briefcase size={16} />
+                <span>Backend Developer</span>
               </div>
-              <div className="stat-card">
-                <div className="stat-number">3+</div>
-                <div className="stat-label">Years Experience</div>
+              
+              <h1 className="about-title">
+                Hello, I'm Jeruel
+                <span className="gradient-text"> Backend Developer</span>
+              </h1>
+              
+              <div className="about-description">
+                <p>
+                  I am an aspiring Backend Developer with a strong foundation in server-side programming, 
+                  RESTful API development, and database management. I specialize in building structured, 
+                  maintainable, and secure backend systems using modern technologies.
+                </p>
+                <p>
+                  I enjoy breaking down complex problems into simple, efficient solutions. My work focuses 
+                  on performance, reliability, and clean architecture. I also value teamwork and communication—making 
+                  sure my services integrate smoothly with frontend and mobile applications.
+                </p>
+                <p>
+                  Currently, I am expanding my skills in cloud technologies, authentication workflows, 
+                  and scalable backend design as I work toward becoming a full-stack or senior backend engineer.
+                </p>
               </div>
-              <div className="stat-card">
-                <div className="stat-number">100%</div>
-                <div className="stat-label">Client Satisfaction</div>
+              
+              {/* Key Expertise */}
+              <div className="expertise-grid">
+                <div className="expertise-card">
+                  <div className="expertise-icon">
+                    <Server size={24} />
+                  </div>
+                  <h3 className="expertise-title">API Development</h3>
+                  <p className="expertise-desc">RESTful & GraphQL APIs with proper documentation</p>
+                </div>
+                <div className="expertise-card">
+                  <div className="expertise-icon">
+                    <Database size={24} />
+                  </div>
+                  <h3 className="expertise-title">Database Design</h3>
+                  <p className="expertise-desc">Optimized schemas and efficient queries</p>
+                </div>
+                <div className="expertise-card">
+                  <div className="expertise-icon">
+                    <Cloud size={24} />
+                  </div>
+                  <h3 className="expertise-title">Cloud Deployment</h3>
+                  <p className="expertise-desc">AWS, Docker, and scalable infrastructure</p>
+                </div>
+                <div className="expertise-card">
+                  <div className="expertise-icon">
+                    <Cpu size={24} />
+                  </div>
+                  <h3 className="expertise-title">System Architecture</h3>
+                  <p className="expertise-desc">Microservices and modular design patterns</p>
+                </div>
               </div>
-              <div className="stat-card">
-                <div className="stat-number">50+</div>
-                <div className="stat-label">Technologies Used</div>
+              
+              {/* Contact Info */}
+              <div className="contact-info">
+                <div className="contact-item">
+                  <Mail size={18} />
+                  <span>jeal.ajera.up@phinmaed.com</span>
+                </div>
+                <div className="contact-item">
+                  <Briefcase size={18} />
+                  <span>Available for Projects</span>
+                </div>
               </div>
             </div>
           </div>
@@ -145,7 +203,7 @@ const Home = () => {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Featured Projects</h2>
-            <p className="section-subtitle">A showcase of my recent work and technical contributions</p>
+            <p className="section-subtitle">Backend systems and API services I've built</p>
             
             {/* Filter Tabs */}
             <div className="filter-tabs-container">
@@ -274,15 +332,15 @@ const Home = () => {
       <section className="cta-section">
         <div className="container">
           <div className="cta-content">
-            <h2 className="cta-title">Ready to Start Your Next Project?</h2>
+            <h2 className="cta-title">Ready to Build Something Amazing?</h2>
             <p className="cta-text">
-              Let's work together to bring your ideas to life with modern web technologies.
+              Let's work together to create robust backend systems that scale with your needs.
             </p>
             <div className="cta-actions">
               <a href="/admin" className="btn-primary btn-large">
                 Add Your Project
               </a>
-              <a href="mailto:contact@example.com" className="btn-secondary btn-large">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jeal.ajera.up@phinmaed.com" target="_blank" rel="noopener noreferrer" className="btn-secondary btn-large">
                 Contact Me
               </a>
             </div>

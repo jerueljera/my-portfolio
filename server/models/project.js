@@ -10,6 +10,14 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a description'],
     },
+    date: {
+      type: String,
+      required: [true, 'Please add a date'],
+    },
+    category: {
+      type: String,
+      required: [true, 'Please add a category'],
+    },
     image: {
       type: String,
       required: false, // Optional: URL to an image of the project

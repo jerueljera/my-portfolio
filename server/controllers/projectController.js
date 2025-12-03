@@ -17,8 +17,25 @@ const getProjects = async (req, res) => {
 // @access  Public (We will protect this later)
 const createProject = async (req, res) => {
   try {
-    const project = await Project.create(req.body); // Create project from JSON body
-    res.status(201).json(project);
+    // The text fields are in req.body
+    const { title, description, technologies, github, link, date, category } = req.body;
+    
+    // The file is in req.file
+    const image = req.file ? req.file.path.replace(/\\/g, "/") : '';
+
+    const newProject = new Project({
+      title,
+      description,
+      technologies: technologies.split(','), // Assuming technologies is a comma-separated string
+      github,
+      link,
+      date,
+      category,
+      image: `/${image}` // Store the path to be served statically
+    });
+
+    const savedProject = await newProject.save();
+    res.status(201).json(savedProject);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

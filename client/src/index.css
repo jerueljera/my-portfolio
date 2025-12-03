@@ -28,6 +28,7 @@ a {
 /* Prevent text size adjustment on orientation change */
 html {
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 /* Smooth scrolling for the whole page */

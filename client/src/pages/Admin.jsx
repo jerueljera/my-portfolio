@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Upload, Link as LinkIcon, Tag, Calendar, Globe, ArrowLeft, Eye, Code, X, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './Admin.css';
@@ -13,15 +14,14 @@ const Admin = () => {
     liveDemoUrl: '',
     category: 'Frontend',
     date: new Date().toISOString().split('T')[0],
-    image: null
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
 
-  const [preview, setPreview] = useState('');
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
-  const fileInputRef = useRef(null);
 
   // Detect mobile screen
   useEffect(() => {
@@ -58,34 +58,12 @@ const Admin = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        showToast('Image size should be less than 5MB', 'error');
-        return;
-      }
-      
-      // Validate file type
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-      if (!validTypes.includes(file.type)) {
-        showToast('Please upload a valid image (JPEG, PNG, WebP)', 'error');
-        return;
-      }
-      
-      setFormData(prev => ({ ...prev, image: file }));
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
+      setImageFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
     }
   };
 
@@ -93,31 +71,29 @@ const Admin = () => {
     e.preventDefault();
     
     // Validate required fields
-    if (!formData.title.trim()) {
-      showToast('Please enter a project title', 'error');
-      return;
-    }
-    
-    if (!formData.description.trim()) {
-      showToast('Please enter a project description', 'error');
-      return;
-    }
-    
-    if (!formData.technologies.trim()) {
-      showToast('Please enter at least one technology', 'error');
-      return;
-    }
-    
-    if (!formData.image) {
-      showToast('Please upload a project image', 'error');
+    if (!formData.title.trim() || !formData.description.trim() || !formData.technologies.trim() || !imageFile) {
+      showToast('Please fill all required fields and upload an image', 'error');
       return;
     }
     
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Form submitted:', formData);
+    const projectFormData = new FormData();
+    projectFormData.append('title', formData.title);
+    projectFormData.append('description', formData.description);
+    projectFormData.append('technologies', formData.technologies.split(',').map(tech => tech.trim()));
+    projectFormData.append('github', formData.githubUrl);
+    projectFormData.append('link', formData.liveDemoUrl);
+    projectFormData.append('image', imageFile);
+    projectFormData.append('date', formData.date);
+    projectFormData.append('category', formData.category);
+
+    try {
+      await axios.post('/api/projects', projectFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       setLoading(false);
       showToast('Project added successfully!', 'success');
       
@@ -130,13 +106,17 @@ const Admin = () => {
         liveDemoUrl: '',
         category: 'Frontend',
         date: new Date().toISOString().split('T')[0],
-        image: null
       });
-      setPreview('');
+      setImageFile(null);
+      setImagePreview('');
       
       // Navigate back to home after successful submission
       setTimeout(() => navigate('/'), 1500);
-    }, 1500);
+    } catch (err) {
+      setLoading(false);
+      console.error(err);
+      showToast(err.response?.data?.message || 'Failed to add project', 'error');
+    }
   };
 
   const showToast = (message, type) => {
@@ -148,14 +128,6 @@ const Admin = () => {
 
   const handleBack = () => {
     navigate(-1);
-  };
-
-  const handleClearImage = () => {
-    setFormData(prev => ({ ...prev, image: null }));
-    setPreview('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
   };
 
   const handleCategorySelect = (category) => {
@@ -182,7 +154,7 @@ const Admin = () => {
           </div>
           
           {/* Mobile Preview Button */}
-          {isMobile && (formData.title || formData.description || preview) && (
+          {isMobile && (formData.title || formData.description || imagePreview) && (
             <button 
               className="mobile-preview-toggle"
               onClick={() => setShowMobilePreview(true)}
@@ -208,68 +180,23 @@ const Admin = () => {
               </div>
               
               <form onSubmit={handleSubmit} className="project-form">
-                {/* Image Upload */}
+                {/* Image File Input */}
                 <div className="form-group">
-                  <label className="form-label">
+                  <label className="form-label" htmlFor="image-file">
                     <Upload size={18} />
                     Project Image
                     <span className="required">*</span>
                   </label>
-                  <div className="image-upload-container">
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      id="image-upload"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="image-input"
-                      aria-label="Upload project image"
-                    />
-                    
-                    {preview ? (
-                      <div className="image-preview-wrapper">
-                        <div className="image-preview">
-                          <img 
-                            src={preview} 
-                            alt="Project preview" 
-                            className="preview-image"
-                          />
-                          <button 
-                            type="button"
-                            className="remove-image-btn"
-                            onClick={handleClearImage}
-                            aria-label="Remove image"
-                          >
-                            <X size={20} />
-                          </button>
-                        </div>
-                        <p className="image-upload-hint">
-                          Click image to change or remove
-                        </p>
-                      </div>
-                    ) : (
-                      <div 
-                        className="upload-area"
-                        onClick={triggerFileInput}
-                        role="button"
-                        tabIndex={0}
-                        onKeyPress={(e) => e.key === 'Enter' && triggerFileInput()}
-                        aria-label="Upload project image"
-                      >
-                        <div className="upload-icon">
-                          <Upload size={48} />
-                        </div>
-                        <div className="upload-text">
-                          <h3>Upload Project Image</h3>
-                          <p>Click to browse or drag and drop</p>
-                        </div>
-                        <div className="upload-requirements">
-                          <p>Supports: JPG, PNG, WebP</p>
-                          <p>Max size: 5MB</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <input
+                    type="file"
+                    id="image-file"
+                    name="imageFile"
+                    onChange={handleFileChange}
+                    className="form-input"
+                    required
+                    aria-label="Project image"
+                    accept="image/*"
+                  />
                 </div>
 
                 {/* Title and Date */}
@@ -459,12 +386,12 @@ const Admin = () => {
                 </div>
                 
                 <div className="preview-content">
-                  {formData.title || formData.description || preview ? (
+                  {formData.title || formData.description || imagePreview ? (
                     <div className="project-preview">
-                      {preview && (
+                      {imagePreview && (
                         <div className="preview-image-container">
                           <img 
-                            src={preview} 
+                            src={imagePreview} 
                             alt="Project preview" 
                             className="preview-image-full"
                           />
@@ -558,12 +485,12 @@ const Admin = () => {
             </button>
           </div>
           <div className="mobile-preview-content">
-            {(formData.title || formData.description || preview) ? (
+            {(formData.title || formData.description || imagePreview) ? (
               <div className="project-preview">
-                {preview && (
+                {imagePreview && (
                   <div className="preview-image-container">
                     <img 
-                      src={preview} 
+                      src={imagePreview} 
                       alt="Project preview" 
                       className="preview-image-full"
                     />

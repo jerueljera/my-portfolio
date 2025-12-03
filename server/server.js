@@ -14,6 +14,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Serve uploaded files statically
+app.use('/uploads', express.static('uploads'));
+
 // --- UPDATE THIS SECTION ---
 // Mount the routes
 app.use('/api/projects', require('./routes/projectRoutes'));
