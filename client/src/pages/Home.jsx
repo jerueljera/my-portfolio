@@ -86,38 +86,6 @@ const Home = () => {
                     <Code size={20} />
                   </div>
                 </div>
-                
-                {/* Quick Stats */}
-                <div className="profile-stats">
-                  <div className="stat-item">
-                    <span className="stat-number">25+</span>
-                    <span className="stat-label">Projects</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-number">3+</span>
-                    <span className="stat-label">Years Exp</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-number">50+</span>
-                    <span className="stat-label">Technologies</span>
-                  </div>
-                </div>
-                
-                {/* Social Links */}
-                <div className="social-links">
-                  <a href="https://github.com/jerueljera" target="_blank" rel="noopener noreferrer" className="social-link">
-                    <Github size={20} />
-                  </a>
-                  <a href="https://www.linkedin.com/in/jeruel-almonte-ajera-8786b4372/" target="_blank" rel="noopener noreferrer" className="social-link">
-                    <Linkedin size={20} />
-                  </a>
-                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                    <Twitter size={20} />
-                  </a>
-                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jeal.ajera.up@phinmaed.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                    <Mail size={20} />
-                  </a>
-                </div>
               </div>
             </div>
 
@@ -337,12 +305,26 @@ const Home = () => {
               Let's work together to create robust backend systems that scale with your needs.
             </p>
             <div className="cta-actions">
-              <a href="/admin" className="btn-primary btn-large">
+              {/* <a href="/admin" className="btn-primary btn-large">
                 Add Your Project
-              </a>
+              </a> */}
               <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jeal.ajera.up@phinmaed.com" target="_blank" rel="noopener noreferrer" className="btn-secondary btn-large">
                 Contact Me
               </a>
+              <div className="social-links">
+                  <a href="https://github.com/jerueljera" target="_blank" rel="noopener noreferrer" className="social-link">
+                    <Github size={20} />
+                  </a>
+                  <a href="https://www.linkedin.com/in/jeruel-almonte-ajera-8786b4372/" target="_blank" rel="noopener noreferrer" className="social-link">
+                    <Linkedin size={20} />
+                  </a>
+                  <a href="#" target="_blank" rel="noopener noreferrer" className="social-link">
+                    <Twitter size={20} />
+                  </a>
+                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jeal.ajera.up@phinmaed.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                    <Mail size={20} />
+                  </a>
+                </div>
             </div>
           </div>
         </div>
