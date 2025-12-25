@@ -79,7 +79,7 @@ button {
 @media print {
   body {
     background: white !important;
-    color: black !importan;
+    color: black !important;
   }
   
   .no-print {
