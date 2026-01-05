@@ -18,7 +18,7 @@ const skillCategories = [
   {
     name: 'DevOps',
     icon: <Terminal size={24} />,
-    skills: ['GIT']
+    skills: ['Git']
   },
   {
     name: 'Tools',
