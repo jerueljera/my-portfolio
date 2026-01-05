@@ -103,18 +103,15 @@ const Home = () => {
               
               <div className="about-description">
                 <p>
-                  I am an aspiring Backend Developer with a strong foundation in server-side programming, 
-                  RESTful API development, and database management. I specialize in building structured, 
-                  maintainable, and secure backend systems using modern technologies.
+                  I am an aspiring backend developer with a basic understanding of server-side development, REST APIs, and database management. 
+                  I am continuously learning and applying my knowledge through personal and academic projects.
                 </p>
                 <p>
-                  I enjoy breaking down complex problems into simple, efficient solutions. My work focuses 
-                  on performance, reliability, and clean architecture. I also value teamwork and communication—making 
-                  sure my services integrate smoothly with frontend and mobile applications.
+                  I enjoy solving problems, learning new technologies, and improving my coding skills step by step. 
+                  I value teamwork and communication and am eager to gain real-world experience in a professional environment.
                 </p>
                 <p>
-                  Currently, I am expanding my skills in cloud technologies, authentication workflows, 
-                  and scalable backend design as I work toward becoming a full-stack or senior backend engineer.
+                  Currently, I am focused on strengthening my backend development skills and preparing for an internship or entry-level developer role.
                 </p>
               </div>
               
