@@ -8,22 +8,22 @@ const skillCategories = [
   {
     name: 'Backend',
     icon: <Server size={24} />,
-    skills: ['Node.js', 'Express', 'Python', 'Django', 'REST APIs', 'GraphQL', 'Microservices']
+    skills: ['Node.js', 'Python', 'Django', 'REST APIs']
   },
   {
     name: 'Database',
     icon: <Database size={24} />,
-    skills: ['MongoDB', 'PostgreSQL', 'MySQL', 'Redis', 'Firebase', 'Elasticsearch']
+    skills: ['MongoDB', 'MySQL', 'Firebase']
   },
   {
     name: 'DevOps',
     icon: <Terminal size={24} />,
-    skills: ['Docker', 'AWS', 'CI/CD', 'Git', 'Linux', 'Nginx', 'Kubernetes']
+    skills: ['GIT']
   },
   {
     name: 'Tools',
     icon: <Cpu size={24} />,
-    skills: ['GitHub', 'Postman', 'JWT', 'OAuth', 'WebSocket', 'Redis', 'Socket.io']
+    skills: ['GitHub', 'Postman']
   }
 ];
 
